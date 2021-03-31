@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @EntityScan(basePackages = {"curso.api.rest.model"}) //scaneia as entidades para criação de tabelas no db
 @ComponentScan(basePackages = {"curso.*"}) //configura a injeção de dependência
-@EnableJpaRepositories(basePackages = {"cusro.api.rest.repository"}) //configura as interfaces de dependencias
+@EnableJpaRepositories(basePackages = {"curso.api.rest.repository"}) //configura as interfaces de dependencias
 @EnableTransactionManagement //configura automaticamente os processos de transaction com o banco para evitar conflitos ao executar queries
 @EnableWebMvc
 @RestController
