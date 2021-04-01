@@ -18,6 +18,14 @@ public class IndexController {
     private UsuarioRepository usuarioRepository;
 
     /*Serviço RESTFul*/
+    @GetMapping(value = "/", produces = "application/json")
+    public ResponseEntity<List<Usuario>> getAllUsers() {
+
+        List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
+
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity getUserById(@PathVariable (value = "id") Long id) {
 
@@ -26,12 +34,12 @@ public class IndexController {
         return new ResponseEntity(usuario.get(), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/", produces = "application/json")
-    public ResponseEntity<List<Usuario>> getAllUsers() {
+    @PostMapping(value = "/", produces = "application/json")
+    public ResponseEntity<Usuario> createNewUser(@RequestBody Usuario user) {
 
-        List<Usuario> usuarios = (List<Usuario>) usuarioRepository.findAll();
+        Usuario usuario = usuarioRepository.save(user);
 
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
     }
 
 
