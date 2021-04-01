@@ -42,5 +42,13 @@ public class IndexController {
         return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
     }
 
+    @PatchMapping(value = "/", produces = "application/json")
+    public ResponseEntity<Usuario> updateUser(@RequestBody Usuario user) {
+
+        Usuario usuario = usuarioRepository.save(user);
+
+        return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+    }
+
 
 }
