@@ -28,7 +28,7 @@ public class IndexController {
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity getUserById(@PathVariable (value = "id") Long id) {
+    public ResponseEntity getUserById(@PathVariable(value = "id") Long id) {
 
         Optional<Usuario> usuario = usuarioRepository.findById(id);
 
@@ -47,6 +47,13 @@ public class IndexController {
 
     @PatchMapping(value = "/", produces = "application/json")
     public ResponseEntity<Usuario> updateUser(@RequestBody Usuario user) {
+
+        Usuario userTemp = usuarioRepository.findUserByLogin(user.getLogin());
+
+        if (!userTemp.getSenha().equals(user.getSenha())) { //senha diferente
+            String senhaCripto = new BCryptPasswordEncoder().encode(user.getPassword());
+            user.setSenha(senhaCripto);
+        }
 
         Usuario usuario = usuarioRepository.save(user);
 

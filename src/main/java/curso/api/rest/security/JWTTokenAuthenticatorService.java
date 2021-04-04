@@ -5,6 +5,7 @@ import curso.api.rest.model.Usuario;
 import curso.api.rest.repository.UsuarioRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Component
@@ -30,6 +32,7 @@ public class JWTTokenAuthenticatorService {
 
     /*Gerando token de autenticação e adicionando ao cabeçalho e resposta http*/
     public void addAuthentication(HttpServletResponse response, String username) throws IOException {
+    //posso enviar daqui o objeto em json do usuario cntendo as suas informaçoes
 
         /*Montagem do Token*/
         String JWT = Jwts.builder() /*invoca o gerador de token*/
@@ -42,8 +45,15 @@ public class JWTTokenAuthenticatorService {
         /*adiciona ao cabeçalho http*/
         response.addHeader(HEADER_STRING, token); //Authorization: Bearer {token}
 
-        /*Escreve token como resposta no corpo do http*/
-        response.getWriter().write("{\"Authorization\": \"" + token + "\"}");
+        /*Carrega as infos do usuário*/
+        Usuario usuario = ApplicationContextLoad.getApplicationContext().getBean(UsuarioRepository.class).findUserByLogin(username);
+
+        /*Escreve token como resposta no corpo do http e Adiciona as infos do usuário no body*/
+        /*TODO: Utilizar org.json para construir a resposta*/
+        response.getWriter().write("{" +
+                "\"id\": \"" + usuario.getId() +"\"" + "," +"\n" +
+                "\"nome\": \"" + usuario.getNome() +"\"" + "," + "\n" +
+                "\"Authorization\": \"" + token + "\"}");
     }
 
     /*Retorna o usuário validado com token ou caso não seja valido retorna null*/
